@@ -83,6 +83,7 @@
   document.addEventListener("DOMContentLoaded", () => {
     const fDest = document.getElementById("fDest");
     [...new Set(PACKAGES.map(p => p.dest))].forEach(d => { const o = document.createElement("option"); o.value = d; o.textContent = d; fDest.appendChild(o); });
+    [...new Set(PACKAGES.map(p => p.type))].forEach(t => { const f = document.getElementById("fType"); if (![...f.options].some(o => o.value === t)) { const o = document.createElement("option"); o.value = t; o.textContent = t; f.appendChild(o); } });
     document.getElementById("pkgGrid").innerHTML = PACKAGES.slice(0, 3).map(packageCard).join("");
   });
 </script>
