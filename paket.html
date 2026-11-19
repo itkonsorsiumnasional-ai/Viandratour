@@ -63,7 +63,8 @@
     const grid = document.getElementById("pkgGrid"), empty = document.getElementById("pkgEmpty"), count = document.getElementById("count");
     const fDest = document.getElementById("fDest"), fType = document.getElementById("fType"), fDur = document.getElementById("fDur"), chips = document.getElementById("chips");
     [...new Set(PACKAGES.map(p => p.dest))].forEach(d => { const o = document.createElement("option"); o.value = d; o.textContent = d; fDest.appendChild(o); });
-    const quick = [["all","Semua"],["3 Negara","3 Negara"],["2 Negara","2 Negara"],["Thailand","Thailand"]];
+    [...new Set(PACKAGES.map(p => p.type))].forEach(t => { if (![...fType.options].some(o => o.value === t)) { const o = document.createElement("option"); o.value = t; o.textContent = t; fType.appendChild(o); } });
+    const quick = [["all","Semua"]].concat([...fType.options].filter(o => o.value !== "all").map(o => [o.value, o.value]));
     chips.innerHTML = quick.map(([v,l]) => `<button type="button" class="chip" data-v="${v}">${l}</button>`).join("");
     const q = new URLSearchParams(location.search);
     const setIfValid = (el, v) => { if (v && [...el.options].some(o => o.value === v)) el.value = v; };
