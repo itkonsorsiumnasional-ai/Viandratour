@@ -1,8 +1,8 @@
 const SITE = {
   name: "Viandra Tour",
-  waNumber: "62885846329800",          // GANTI: format 62..., tanpa + atau 0 di depan
-  waDisplay: "0858-4632-9800",        // GANTI
-  email: "viandratourofficiall@gmail.com",      // GANTI
+  waNumber: "62885846329800",
+  waDisplay: "0858-4632-9800",
+  email: "viandratourofficiall@gmail.com",
   instagram: "viandratour",           // GANTI, kosongkan jika belum ada
   threads: "", facebook: "viandratour", tiktok: "viandratour",
   address: "",
@@ -113,6 +113,25 @@ const PACKAGES = [
     included: ["Tiket pesawat pulang pergi","Akomodasi hotel bintang 3 / setaraf","Transportasi","Driver/guide berbahasa Indonesia","Makan dan tour sesuai program","Makan malam di cruise (hari ke-2)","Tiket masuk objek wisata"],
     excluded: EXC_TH, costs: COSTS_TH, terms: TERMS }
 ];
+
+/* ===== Gabungkan paket bawaan dengan data dari Panel Admin (admin-data.js) =====
+   BUILTIN_PACKAGES = paket bawaan di atas. Panel admin bisa mengubah, menyembunyikan, atau menambah paket. */
+const BUILTIN_PACKAGES = JSON.parse(JSON.stringify(PACKAGES));
+let ADMIN = { packages: [], hidden: [], docs: [] };
+(function(){ try {
+  const x = new XMLHttpRequest(); x.open("GET", "admin-data.js?v=" + Date.now(), false); x.send();
+  if (x.status === 200) { const m = x.responseText.match(/^\s*window\.ADMIN_DATA\s*=\s*([\s\S]*?);\s*$/); if (m) ADMIN = Object.assign(ADMIN, JSON.parse(m[1])); }
+} catch (e) {} })();
+const relPath = s => /^(data:|https?:)/i.test(s || "") ? s : String(s || "").replace(/^\//, "");
+(function(){
+  const hidden = new Set(ADMIN.hidden || []), out = [];
+  BUILTIN_PACKAGES.forEach(b => { if (!hidden.has(b.slug)) out.push(ADMIN.packages.find(p => p.slug === b.slug) || b); });
+  ADMIN.packages.forEach(p => { if (!BUILTIN_PACKAGES.some(b => b.slug === p.slug) && !hidden.has(p.slug)) out.push(p); });
+  out.forEach(p => { p.image = relPath(p.image); });
+  out.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+  PACKAGES.length = 0; out.forEach(p => PACKAGES.push(p));
+})();
+const ADMIN_DOCS = (ADMIN.docs || []).map(d => Object.assign({}, d, { src: relPath(d.src) }));
 
 /* ===== Bagian di bawah ini tidak perlu diubah ===== */
 const wa = msg => `https://wa.me/${SITE.waNumber}?text=${encodeURIComponent(msg)}`;
