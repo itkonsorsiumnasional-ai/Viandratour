@@ -1,10 +1,10 @@
 const SITE = {
   name: "Viandra Tour",
-  waNumber: "6280000000000",          // GANTI: format 62..., tanpa + atau 0 di depan
-  waDisplay: "0800-0000-0000",        // GANTI
-  email: "info@viandratour.com",      // GANTI
+  waNumber: "62885846329800",          // GANTI: format 62..., tanpa + atau 0 di depan
+  waDisplay: "0858-4632-9800",        // GANTI
+  email: "viandratourofficiall@gmail.com",      // GANTI
   instagram: "viandratour",           // GANTI, kosongkan jika belum ada
-  threads: "", facebook: "", tiktok: "",
+  threads: "", facebook: "viandratour", tiktok: "viandratour",
   address: "",
   offices: [],                        // contoh: { name:"Head Office", address:"Alamat lengkap" }
   hours: "Senin sampai Sabtu, 09.00 sampai 17.00"
@@ -75,37 +75,37 @@ const SCH = {
 
 /* ===== DATA PAKET (contoh; ganti dengan paket Viandra Tour) ===== */
 const PACKAGES = [
-  { slug:"3-negara-7d6n", name:"Tour 3 Negara Asia 7D6N", dest:"Malaysia Singapore Thailand", type:"3 Negara", days:7, nights:6, color:"#0a2f9e,#1a8cff", price:6990000, tag:"", image:"",
+  { slug:"3-negara-7d6n", name:"Tour 3 Negara Asia 7D6N", dest:"Malaysia Singapore Thailand", type:"3 Negara", days:7, nights:6, color:"#0a2f9e,#1a8cff", price:6990000, tag:"", image:"tour-3-negara-7d6n.png",
     items:["Malaysia, Singapore, Thailand (Hatyai)","Jadwal Des 2026 sampai Nov 2027","Bisa berangkat dari kota lain"],
     schedule:["Keberangkatan mingguan, umumnya setiap Rabu. Di periode high season ada tambahan tanggal","Bisa berangkat dari seluruh kota/airport di Indonesia","Meeting point: Bandara KLIA, Kuala Lumpur"],
     departures: sched(SCH), bonus:["Free cable car Genting Highland","Bisa daftar 1 orang tanpa biaya tambahan"],
     itinerary: IT_7D6N, included: INC_MY("6 malam"), excluded: EXC_MY("650.000"),
     costs: ["Single supplement: hubungi kami"].concat(DP_MY), terms: TERMS },
-  { slug:"3-negara-bangkok-pattaya-8d7n", name:"Tour 3 Negara Asia 8D7N Bangkok Pattaya", dest:"Malaysia Singapore Thailand", type:"3 Negara", days:8, nights:7, color:"#0b4fd6,#22d3ee", price:13200000, tag:"", image:"",
+  { slug:"3-negara-bangkok-pattaya-8d7n", name:"Tour 3 Negara Asia 8D7N Bangkok Pattaya", dest:"Malaysia Singapore Thailand", type:"3 Negara", days:8, nights:7, color:"#0b4fd6,#22d3ee", price:13200000, tag:"", image:"tour-3-negara-bangkok-pattaya-8d7n.png",
     items:["Malaysia, Singapore, Bangkok, Pattaya","Jadwal Des 2026 sampai Nov 2027","Itinerary 8 hari lengkap"],
     schedule:["Keberangkatan mingguan, umumnya setiap Rabu","Meeting point: Bandara KLIA dan Bandara BKK (Bangkok)"],
     departures: sched(SCH), bonus:["Free cable car Genting Highland"],
     itinerary: IT_8D7N, included: INC_MY("7 malam"), excluded: EXC_MY("700.000"),
     costs: ["Single supplement: hubungi kami"].concat(DP_MY), terms: TERMS },
-  { slug:"2-negara-4d3n", name:"Tour 2 Negara Malaysia Singapore 4D3N", dest:"Malaysia Singapore", type:"2 Negara", days:4, nights:3, color:"#0a2f9e,#0b4fd6", price:6390000, tag:"", image:"",
+  { slug:"2-negara-4d3n", name:"Tour 2 Negara Malaysia Singapore 4D3N", dest:"Malaysia Singapore", type:"2 Negara", days:4, nights:3, color:"#0a2f9e,#0b4fd6", price:6390000, tag:"", image:"tour-2-negara-4d3n.png",
     items:["Malaysia dan Singapore","Jadwal Des 2026 sampai Nov 2027","Cocok untuk liburan singkat"],
     schedule:["Keberangkatan mingguan, umumnya setiap Rabu","Meeting point: Bandara KLIA, Kuala Lumpur"],
     departures: sched(SCH), bonus:["Free cable car Genting Highland","Bisa daftar 1 orang tanpa biaya tambahan"],
     itinerary: IT_4D3N, included: INC_MY("3 malam"), excluded: EXC_MY("550.000"),
     costs: ["Single supplement: hubungi kami"].concat(DP_MY), terms: TERMS },
-  { slug:"2-negara-5d4n", name:"Tour 2 Negara Malaysia Singapore 5D4N", dest:"Malaysia Singapore", type:"2 Negara", days:5, nights:4, color:"#1a8cff,#22d3ee", price:6590000, tag:"", image:"",
+  { slug:"2-negara-5d4n", name:"Tour 2 Negara Malaysia Singapore 5D4N", dest:"Malaysia Singapore", type:"2 Negara", days:5, nights:4, color:"#1a8cff,#22d3ee", price:6590000, tag:"", image:"tour-2-negara-5d4n.png",
     items:["Malaysia dan Singapore","Waktu lebih longgar di tiap kota","Jadwal Des 2026 sampai Nov 2027"],
     schedule:["Keberangkatan mingguan, umumnya setiap Rabu","Meeting point: Bandara KLIA, Kuala Lumpur"],
     departures: sched(SCH), bonus:["Free cable car Genting Highland","Bisa daftar 1 orang tanpa biaya tambahan"],
     itinerary: IT_5D4N, included: INC_MY("4 malam"), excluded: EXC_MY("550.000"),
     costs: ["Single supplement: hubungi kami"].concat(DP_MY), terms: TERMS },
-  { slug:"bangkok-pattaya-4d3n", name:"Tour Bangkok Pattaya 4D3N", dest:"Thailand", type:"Thailand", days:4, nights:3, color:"#0b4fd6,#f5b400", price:6450000, tag:"", image:"",
+  { slug:"bangkok-pattaya-4d3n", name:"Tour Bangkok Pattaya 4D3N", dest:"Thailand", type:"Thailand", days:4, nights:3, color:"#0b4fd6,#f5b400", price:6450000, tag:"", image:"tour-bangkok-pattaya-4d3n.png",
     items:["Bangkok dan Pattaya","Berangkat setiap hari, minimal 2 orang (SIC)","Periode Nov 2026 sampai Mar 2027"],
     schedule:["Berangkat setiap hari, bebas pilih tanggal","Keberangkatan SIC (tour gabungan), minimal 2 orang","Meeting point: Bandara Don Mueang atau Suvarnabhumi, Bangkok"],
     daily:["2026-11-01","2027-03-31"], itinerary: IT_BP,
     included: ["Tiket pesawat pulang pergi","Akomodasi hotel sesuai pilihan","Transportasi","Driver/guide berbahasa Indonesia","Makan dan tour sesuai program","Air mineral 1 botol per hari","Tiket masuk objek wisata"],
     excluded: EXC_TH, costs: COSTS_TH, terms: TERMS },
-  { slug:"bangkok-damnoen-dinner-cruise-4d3n", name:"Bangkok Damnoen Dinner Cruise 4D3N", dest:"Thailand", type:"Thailand", days:4, nights:3, color:"#0a2f9e,#f5b400", price:6850000, tag:"", image:"",
+  { slug:"bangkok-damnoen-dinner-cruise-4d3n", name:"Bangkok Damnoen Dinner Cruise 4D3N", dest:"Thailand", type:"Thailand", days:4, nights:3, color:"#0a2f9e,#f5b400", price:6850000, tag:"", image:"tour-bangkok-damnoen-dinner-cruise-4d3n.png",
     items:["Bangkok dan Damnoen Saduak","Makan malam di kapal pesiar","Berangkat setiap hari, bebas pilih tanggal"],
     schedule:["Berangkat setiap hari, bebas pilih tanggal","Keberangkatan SIC, minimal 2 orang","Meeting point: Bandara Don Mueang atau Suvarnabhumi, Bangkok"],
     bonus:["Free Calypso Cabaret Show di Asiatique the Riverfront Night Market"],
