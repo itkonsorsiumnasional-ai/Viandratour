@@ -57,7 +57,7 @@
 /* Tambah foto: unggah file ke folder yang sama, lalu tambah satu baris di DOCS.
    Contoh: { src:"dok-klcc-1.jpg", cap:"Rombongan di KLCC", cat:"Malaysia" }
    Selama daftar kosong, halaman menampilkan "Dokumentasi segera hadir". */
-const DOCS = [];
+const DOCS = ADMIN_DOCS.slice();   // foto dari Panel Admin
 document.addEventListener("DOMContentLoaded", () => {
   const gal = document.getElementById("gal"), chips = document.getElementById("chips"), empty = document.getElementById("empty");
   const lb = document.getElementById("lb"), lbImg = document.getElementById("lbImg"), lbCap = document.getElementById("lbCap");
