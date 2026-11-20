@@ -6,7 +6,11 @@ const SITE = {
   instagram: "viandratour",           // GANTI, kosongkan jika belum ada
   threads: "", facebook: "viandratour", tiktok: "viandratour",
   address: "",
-  offices: [],                        // contoh: { name:"Head Office", address:"Alamat lengkap" }
+  offices: [
+    { name: "Head Office Jakarta Barat", address: "Jalan Delima IV No. 35A RT 06 RW 03, Kembangan Utara, Jakarta Barat 11610" },
+    { name: "Branch Office Graha Raya Bintaro", address: "Ruko Venice Blok JE No. 8, Jl. Boulevard Graha Raya Bintaro, Tangerang Selatan" },
+    { name: "Branch Office Bekasi", address: "Ruko Kalimas Blok A 12, Jl. Chairil Anwar, Bekasi Timur" }
+  ],
   hours: "Senin sampai Sabtu, 09.00 sampai 17.00"
 };
 
