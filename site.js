@@ -1,11 +1,18 @@
 const SITE = {
   name: "Viandra Tour",
-  waNumber: "62885846329800",
+  // Nomor WhatsApp admin (format 62..., tanpa + atau 0 di depan)
+  admins: [
+    { name: "Admin 1", wa: "6285846329800", display: "0858-4632-9800" },
+    { name: "Admin 2", wa: "628568514652",  display: "0856-8514-652" },
+    { name: "Admin 3", wa: "628159665663",  display: "0815-9665-663" }
+  ],
+  rotate: false,   // false = tombol Chat WhatsApp umum selalu ke Admin 1. true = bergantian acak ke ketiga admin
+  waNumber: "6285846329800",   // cadangan = Admin 1
   waDisplay: "0858-4632-9800",
   email: "viandratourofficiall@gmail.com",
   instagram: "viandratour",           // GANTI, kosongkan jika belum ada
   threads: "", facebook: "viandratour", tiktok: "viandratour",
-  address: "",
+  address: "Jalan Delima IV No. 35A RT 06 RW 03, Kembangan Utara, Jakarta Barat 11610",
   offices: [
     { name: "Head Office Jakarta Barat", address: "Jalan Delima IV No. 35A RT 06 RW 03, Kembangan Utara, Jakarta Barat 11610" },
     { name: "Branch Office Graha Raya Bintaro", address: "Ruko Venice Blok JE No. 8, Jl. Boulevard Graha Raya Bintaro, Tangerang Selatan" },
@@ -138,7 +145,8 @@ const relPath = s => /^(data:|https?:)/i.test(s || "") ? s : String(s || "").rep
 const ADMIN_DOCS = (ADMIN.docs || []).map(d => Object.assign({}, d, { src: relPath(d.src) }));
 
 /* ===== Bagian di bawah ini tidak perlu diubah ===== */
-const wa = msg => `https://wa.me/${SITE.waNumber}?text=${encodeURIComponent(msg)}`;
+const pickAdmin = () => { const a = SITE.admins || []; if (!a.length) return SITE.waNumber; return (SITE.rotate ? a[Math.floor(Math.random() * a.length)] : a[0]).wa; };
+const wa = (msg, num) => `https://wa.me/${num || pickAdmin()}?text=${encodeURIComponent(msg)}`;
 const rupiah = n => "Rp " + n.toLocaleString("id-ID");
 const findPackage = slug => PACKAGES.find(p => p.slug === slug);
 const NAV = [["home","./","Beranda"],["paket","paket","Paket Wisata"],["layanan","layanan","Layanan"],["dokumentasi","dokumentasi","Dokumentasi"],["kontak","kontak","Kontak"]];
@@ -178,6 +186,17 @@ function renderHeader(active){
   </header>`;
 }
 
+const WA_ICON = `<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 3.5A11.8 11.8 0 0 0 12 0C5.4 0 0 5.4 0 12c0 2.1.6 4.2 1.6 6L0 24l6.2-1.6A12 12 0 0 0 12 24c6.6 0 12-5.4 12-12 0-3.2-1.2-6.2-3.5-8.5zM12 21.9c-1.8 0-3.6-.5-5.1-1.4l-.4-.2-3.7 1 1-3.6-.2-.4A9.9 9.9 0 0 1 2.1 12C2.1 6.5 6.5 2.1 12 2.1S21.9 6.5 21.9 12 17.5 21.9 12 21.9zm5.4-7.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.2-.4-2.3-1.4-.8-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.4-.5.3-.5c.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.3 5.2 4.6.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.1-.3-.2-.6-.3z"/></svg>`;
+/* Tombol WhatsApp melayang: kalau ada lebih dari 1 admin, klik akan membuka daftar admin */
+function waFab(){
+  const a = SITE.admins || [], msg = "Halo Viandra Tour, saya ingin bertanya tentang paket wisata.";
+  if (a.length < 2) return `<a class="wa-float" data-wa="${msg}" href="#" aria-label="Chat WhatsApp">${WA_ICON}<span>Chat WhatsApp</span></a>`;
+  return `<div class="wa-fab" id="waFab">
+    <div class="wa-menu" role="menu" aria-label="Pilih admin WhatsApp"><div class="wa-menu-t">Chat dengan admin kami</div>${a.map(x => `<a role="menuitem" href="${wa(msg, x.wa)}" target="_blank" rel="noopener"><i>${WA_ICON}</i><span>${x.name}<small>${x.display}</small></span></a>`).join("")}</div>
+    <button type="button" class="wa-float" id="waBtn" aria-expanded="false" aria-controls="waFab" aria-label="Chat WhatsApp, pilih admin">${WA_ICON}<span>Chat WhatsApp</span></button>
+  </div>`;
+}
+
 function renderFooter(){
   return `
   <style>
@@ -185,6 +204,17 @@ function renderFooter(){
     .office-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
     .office{display:grid;gap:4px;align-content:start;line-height:1.5}
     .office strong{color:#fff}
+    .office a{color:var(--yellow);font-weight:700}
+    .wa-fab{position:fixed;right:18px;bottom:18px;z-index:60}
+    .wa-fab .wa-float{position:static;border:0;cursor:pointer;font:inherit;font-weight:800}
+    .wa-menu{display:none;position:absolute;right:0;bottom:calc(100% + 12px);background:#fff;border-radius:18px;box-shadow:0 12px 34px rgba(0,0,0,.28);padding:10px;min-width:250px}
+    .wa-fab.open .wa-menu{display:block}
+    .wa-menu-t{font-weight:800;color:var(--green-900);padding:6px 10px 8px;font-size:.92rem}
+    .wa-menu a{display:flex;align-items:center;gap:12px;padding:9px 10px;border-radius:12px;color:var(--green-900);font-weight:800}
+    .wa-menu a:hover{background:#eaf2ff}
+    .wa-menu a i{width:38px;height:38px;border-radius:50%;background:#25d366;color:#fff;display:flex;align-items:center;justify-content:center;flex:none}
+    .wa-menu a i svg{width:20px;height:20px}
+    .wa-menu a small{display:block;font-weight:600;color:var(--muted);font-size:.82rem}
     @media (max-width:960px){.office-grid{grid-template-columns:1fr}}
   </style>
   <footer>
@@ -198,21 +228,18 @@ function renderFooter(){
         <div>
           <h3>Kontak</h3>
           <ul>
-            <li>WhatsApp: <a data-wa="Halo Viandra Tour" href="#">${SITE.waDisplay}</a></li>
+            ${(SITE.admins || []).map(a => `<li>WhatsApp ${a.name}: <a href="${wa("Halo Viandra Tour, saya ingin bertanya.", a.wa)}" target="_blank" rel="noopener">${a.display}</a></li>`).join("")}
             <li>Email: <a href="mailto:${SITE.email}">${SITE.email}</a></li>
             ${SITE.instagram ? `<li>Instagram: <a href="https://instagram.com/${SITE.instagram}" target="_blank" rel="noopener">@${SITE.instagram}</a></li>` : ""}
             <li>Jam layanan: ${SITE.hours}</li>
           </ul>
         </div>
       </div>
-      ${SITE.offices.length ? `<div class="foot-offices"><h3>Kantor Kami</h3><div class="office-grid">${SITE.offices.map(o => `<div class="office"><strong>${o.name}</strong><span>${o.address}</span></div>`).join("")}</div></div>` : ""}
+      ${SITE.offices.length ? `<div class="foot-offices"><h3>Kantor Kami</h3><div class="office-grid">${SITE.offices.map(o => `<div class="office"><strong>${o.name}</strong><span>${o.address}</span><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(o.address)}" target="_blank" rel="noopener">📍 Buka di Google Maps</a></div>`).join("")}</div></div>` : ""}
       <p class="copy">© ${new Date().getFullYear()} ${SITE.name}. Semua hak dilindungi.</p>
     </div>
   </footer>
-  <a class="wa-float" data-wa="Halo Viandra Tour, saya ingin bertanya tentang paket wisata." href="#" aria-label="Chat WhatsApp">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 3.5A11.8 11.8 0 0 0 12 0C5.4 0 0 5.4 0 12c0 2.1.6 4.2 1.6 6L0 24l6.2-1.6A12 12 0 0 0 12 24c6.6 0 12-5.4 12-12 0-3.2-1.2-6.2-3.5-8.5zM12 21.9c-1.8 0-3.6-.5-5.1-1.4l-.4-.2-3.7 1 1-3.6-.2-.4A9.9 9.9 0 0 1 2.1 12C2.1 6.5 6.5 2.1 12 2.1S21.9 6.5 21.9 12 17.5 21.9 12 21.9zm5.4-7.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.2-.4-2.3-1.4-.8-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.4-.5.3-.5c.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.3 5.2 4.6.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.1-.3-.2-.6-.3z"/></svg>
-    <span>Chat WhatsApp</span>
-  </a>`;
+  ${waFab()}`;
 }
 
 /* Link tanpa ".html" (butuh hosting yang mendukung, mis. Netlify/Vercel/GitHub Pages) */
@@ -235,6 +262,14 @@ document.addEventListener("DOMContentLoaded", () => {
   if (h) h.outerHTML = renderHeader(active);
   if (f) f.outerHTML = renderFooter();
   document.querySelectorAll("[data-wa]").forEach(a => { a.href = wa(a.dataset.wa); a.target = "_blank"; a.rel = "noopener"; });
+  const fab = document.getElementById("waFab"), fbtn = document.getElementById("waBtn");
+  if (fab && fbtn) {
+    const closeFab = () => { fab.classList.remove("open"); fbtn.setAttribute("aria-expanded", "false"); };
+    fbtn.addEventListener("click", e => { e.stopPropagation(); const o = fab.classList.toggle("open"); fbtn.setAttribute("aria-expanded", o); });
+    document.addEventListener("click", e => { if (!fab.contains(e.target)) closeFab(); });
+    document.addEventListener("keydown", e => { if (e.key === "Escape") closeFab(); });
+  }
+
   document.querySelectorAll('a[href="kenapa-kami.html"], a[href="cara-pesan.html"]').forEach(a => { a.href = "dokumentasi"; a.textContent = "Lihat dokumentasi perjalanan"; });
   const toggle = document.getElementById("menuToggle"), menu = document.getElementById("menu");
   if (toggle && menu) toggle.addEventListener("click", () => { const o = menu.classList.toggle("open"); toggle.setAttribute("aria-expanded", o); });
