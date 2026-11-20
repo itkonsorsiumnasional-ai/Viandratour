@@ -26,14 +26,6 @@
   .why ul{list-style:none;padding:0;margin:0}
   .why li{position:relative;padding-left:28px;margin:10px 0;line-height:1.5;color:var(--green-900);font-weight:600}
   .why li::before{content:"✓";position:absolute;left:0;color:var(--green-700);font-weight:800}
-  .off-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
-  .off{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:24px;display:flex;flex-direction:column;gap:8px}
-  .off .tg{align-self:flex-start;background:var(--yellow-soft);color:var(--green-900);font-weight:800;font-size:.8rem;border-radius:999px;padding:3px 12px}
-  .off h3{font-family:'Baloo 2',sans-serif;color:var(--green-900);font-size:1.2rem;line-height:1.25;margin:0}
-  .off address{font-style:normal;color:var(--muted);line-height:1.55;flex:1;margin-bottom:8px}
-  .off .btn{justify-content:center}
-  @media (max-width:960px){.off-grid{grid-template-columns:1fr 1fr}}
-  @media (max-width:640px){.off-grid{grid-template-columns:1fr}}
   @media (max-width:960px){.svc-grid{grid-template-columns:1fr 1fr}}
   @media (max-width:640px){.svc-grid{grid-template-columns:1fr}.why{padding:24px 22px}}
 </style>
@@ -54,24 +46,10 @@
   </div></div></section>
   <section style="padding-top:0"><div class="wrap"><div class="why"><h2>Mengapa Memilih VIANDRA TOUR?</h2><ul>
     <li>Pilihan destinasi wisata yang beragam.</li><li>Paket perjalanan dengan harga kompetitif.</li><li>Pilihan keberangkatan dari berbagai kota di Indonesia.</li><li>Itinerary perjalanan yang terencana.</li><li>Pelayanan ramah dan profesional.</li><li>Pengalaman liburan yang nyaman dan menyenangkan.</li></ul></div></div></section>
-  <section style="padding-top:0"><div class="wrap">
-    <h2 class="sec-title">Kantor Kami</h2>
-    <div class="off-grid" id="offGrid"></div>
-  </div></section>
-
   <section class="cta"><div class="wrap"><div class="cta-box"><div><h2>VIANDRA TOUR – Travel More, Explore More, Experience More!</h2><p>Wujudkan perjalanan impian Anda bersama kami.</p></div>
     <a class="btn btn-wa" data-wa="Halo Viandra Tour, saya ingin konsultasi perjalanan." href="#">Tanya lewat WhatsApp</a></div></div></section>
 </main>
 <div id="site-footer"></div>
 <script src="site.js"></script>
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const grid = document.getElementById("offGrid"), list = SITE.offices || [];
-    if (!list.length) { grid.closest("section").remove(); return; }
-    const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-    grid.innerHTML = list.map((k, n) => `<article class="off"><span class="tg">🏢 ${n ? "Cabang" : "Kantor Pusat"}</span><h3>${esc(k.name)}</h3><address>${esc(k.address)}</address>
-      <a class="btn btn-outline" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(k.address)}">Buka di Google Maps</a></article>`).join("");
-  });
-</script>
 </body>
 </html>
