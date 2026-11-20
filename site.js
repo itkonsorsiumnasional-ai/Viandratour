@@ -290,8 +290,15 @@ window.addEventListener("load", () => {
   }
 });
 
+/* Foto latar bagian atas beranda (file hero.jpg di repo), posisi di tengah. Ganti file hero.jpg untuk mengubah fotonya. */
+const HERO_STYLE = `<style>
+  .hero{background:linear-gradient(90deg,rgba(10,47,158,.90) 0%,rgba(10,47,158,.68) 50%,rgba(10,47,158,.42) 100%),url('hero.jpg') center center/cover no-repeat}
+  @media (max-width:960px){.hero{background:linear-gradient(180deg,rgba(10,47,158,.88),rgba(10,47,158,.78)),url('hero.jpg') center center/cover no-repeat}}
+</style>`;
+
 document.addEventListener("DOMContentLoaded", () => {
   const active = document.body.dataset.page;
+  if (active === "home") document.head.insertAdjacentHTML("beforeend", HERO_STYLE);
   const h = document.getElementById("site-header"), f = document.getElementById("site-footer");
   if (h) h.outerHTML = renderHeader(active);
   if (f) f.outerHTML = renderFooter();
