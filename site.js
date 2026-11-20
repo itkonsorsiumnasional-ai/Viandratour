@@ -242,6 +242,40 @@ function renderFooter(){
   ${waFab()}`;
 }
 
+/* ===== Tombol melayang sosial media (di atas tombol WhatsApp). Akun diatur di SITE di bagian atas file ini ===== */
+function renderSocial(){
+  const clean = v => String(v || "").replace(/^@/, "");
+  const list = [
+    SITE.instagram && { n:"Instagram", u:`https://instagram.com/${clean(SITE.instagram)}`, h:`@${clean(SITE.instagram)}`, c:"linear-gradient(45deg,#f9a03a,#e1306c,#833ab4)",
+      i:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="#fff" stroke="none"/></svg>' },
+    SITE.tiktok && { n:"TikTok", u:`https://www.tiktok.com/@${clean(SITE.tiktok)}`, h:`@${clean(SITE.tiktok)}`, c:"#111",
+      i:'<b style="color:#fff;font-size:18px;line-height:1">♪</b>' },
+    SITE.threads && { n:"Threads", u:`https://www.threads.com/@${clean(SITE.threads)}`, h:`@${clean(SITE.threads)}`, c:"#111",
+      i:'<b style="color:#fff;font-size:18px;line-height:1;font-family:Arial,sans-serif">@</b>' },
+    SITE.facebook && { n:"Facebook", u:/^https?:/.test(SITE.facebook) ? SITE.facebook : `https://facebook.com/${clean(SITE.facebook)}`, h:"Viandra Tour", c:"#1877f2",
+      i:'<b style="color:#fff;font-size:20px;line-height:1;font-family:Arial,sans-serif">f</b>' }
+  ].filter(Boolean);
+  if (!list.length) return "";
+  const share = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.5l6.8-4M8.6 13.5l6.8 4"/></svg>';
+  const css = `<style>
+    .sc-float{position:fixed;right:18px;bottom:82px;z-index:60;font-family:inherit}
+    .sc-btn{display:flex;align-items:center;gap:8px;border:0;cursor:pointer;font:inherit;font-weight:800;color:#fff;text-decoration:none;background:linear-gradient(45deg,#e1306c,#833ab4);border-radius:999px;padding:13px 20px;box-shadow:0 8px 22px rgba(0,0,0,.25)}
+    .sc-btn:hover{filter:brightness(1.1)}
+    .sc-menu{display:none;position:absolute;right:0;bottom:calc(100% + 10px);background:#fff;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.25);padding:8px;min-width:210px}
+    .sc-float.open .sc-menu{display:block}
+    .sc-menu a{display:flex;align-items:center;gap:12px;padding:9px 10px;border-radius:10px;color:#0f1b3d;text-decoration:none;font-weight:700}
+    .sc-menu a:hover{background:#eaf2ff}
+    .sc-menu a i{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;font-style:normal}
+    .sc-menu a small{display:block;font-weight:600;color:#6b7a99;font-size:.78rem}
+    @media (max-width:960px){.sc-btn span{display:none}.sc-btn{padding:15px}.sc-float{bottom:80px}}
+  </style>`;
+  if (list.length === 1) return css + `<div class="sc-float"><a class="sc-btn" href="${list[0].u}" target="_blank" rel="noopener" aria-label="${list[0].n} ${SITE.name}">${share}<span>Sosial Media</span></a></div>`;
+  return css + `<div class="sc-float" id="scFloat">
+    <div class="sc-menu" id="scMenu">${list.map(x => `<a href="${x.u}" target="_blank" rel="noopener"><i style="background:${x.c}">${x.i}</i><span>${x.n}<small>${x.h}</small></span></a>`).join("")}</div>
+    <button type="button" class="sc-btn" id="scBtn" aria-expanded="false" aria-controls="scMenu" aria-label="Sosial media ${SITE.name}">${share}<span>Sosial Media</span></button>
+  </div>`;
+}
+
 /* Link tanpa ".html" (butuh hosting yang mendukung, mis. Netlify/Vercel/GitHub Pages) */
 const cleanHref = h => {
   const m = (h || "").match(/^(?:\.\/)?([\w-]+)\.html(\?[^#]*)?(#.*)?$/);
@@ -261,6 +295,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const h = document.getElementById("site-header"), f = document.getElementById("site-footer");
   if (h) h.outerHTML = renderHeader(active);
   if (f) f.outerHTML = renderFooter();
+  if (document.body.dataset.page) document.body.insertAdjacentHTML("beforeend", renderSocial());
+  const sc = document.getElementById("scFloat"), scBtn = document.getElementById("scBtn");
+  if (sc && scBtn) {
+    const closeSc = () => { sc.classList.remove("open"); scBtn.setAttribute("aria-expanded", "false"); };
+    scBtn.addEventListener("click", e => { e.stopPropagation(); const o = sc.classList.toggle("open"); scBtn.setAttribute("aria-expanded", o); });
+    document.addEventListener("click", e => { if (!sc.contains(e.target)) closeSc(); });
+    document.addEventListener("keydown", e => { if (e.key === "Escape") closeSc(); });
+  }
+
   document.querySelectorAll("[data-wa]").forEach(a => { a.href = wa(a.dataset.wa); a.target = "_blank"; a.rel = "noopener"; });
   const fab = document.getElementById("waFab"), fbtn = document.getElementById("waBtn");
   if (fab && fbtn) {
