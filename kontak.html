@@ -78,7 +78,12 @@
   const KONTAK = { jam: "Senin - Sabtu, 09.00 - 17.00 WIB", jamCatatan: "Di luar jam kerja, pesan tetap kami balas di hari berikutnya." };
   document.addEventListener("DOMContentLoaded", () => {
     const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-    const items = [{ ico: "💬", t: "WhatsApp", d: SITE.waDisplay, href: wa("Halo Viandra Tour, saya ingin bertanya tentang paket wisata."), ext: true }];
+    const sapa = "Halo Viandra Tour, saya ingin bertanya tentang paket wisata.";
+    // WhatsApp: tampilkan Admin 1, 2, 3 (diatur di SITE.admins pada site.js)
+    const admins = SITE.admins || [];
+    const items = admins.length
+      ? admins.map(a => ({ ico: "💬", t: "WhatsApp " + a.name, d: a.display, href: wa(sapa, a.wa), ext: true }))
+      : [{ ico: "💬", t: "WhatsApp", d: SITE.waDisplay, href: wa(sapa), ext: true }];
     if (SITE.email) items.push({ ico: "✉️", t: "Email", d: SITE.email, href: "mailto:" + SITE.email });
     if (SITE.instagram) items.push({ ico: "📸", t: "Instagram", d: "@" + SITE.instagram, href: "https://instagram.com/" + SITE.instagram, ext: true });
     const kantor = SITE.offices || [];
