@@ -4,7 +4,7 @@ const SITE = {
   admins: [
     { name: "Admin 1", wa: "6285846329800", display: "0858-4632-9800" },
     { name: "Admin 2", wa: "628568514652",  display: "0856-8514-652" },
-    { name: "Admin 3", wa: "628159665663",  display: "0815-9665-663" }
+    { name: "Admin 3", wa: "628159865663",  display: "0815-9865-663" }
   ],
   rotate: false,   // false = tombol Chat WhatsApp umum selalu ke Admin 1. true = bergantian acak ke ketiga admin
   waNumber: "6285846329800",   // cadangan = Admin 1
